@@ -13,7 +13,10 @@ var configDB = require('./config/database.js');
 
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
-
+var db = mongoose.connection;
+db.on('connected', function() {
+    console.log('Mongo DB connection open for DB');
+});
 require('./config/passport')(passport); // pass passport for configuration
 
 app.configure(function() {
@@ -21,7 +24,10 @@ app.configure(function() {
 	// set up our express application
 	app.use(express.logger('dev')); // log every request to the console
 	app.use(express.cookieParser()); // read cookies (needed for auth)
-	app.use(express.bodyParser()); // get information from html forms
+	//app.use(express.bodyParser()); // get information from html forms
+    /*app.use(express.bodyParser.urlencoded({
+        extended: false
+    }))*/
 
 	app.set('view engine', 'ejs'); // set up ejs for templating
 
